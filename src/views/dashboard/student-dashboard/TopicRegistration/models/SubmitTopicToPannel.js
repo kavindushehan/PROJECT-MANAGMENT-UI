@@ -147,100 +147,125 @@ export default function SubmitTopicToPanel(props) {
             let formdata = new FormData();
             formdata.append("doc", acceptedFiles[0]);
             formdata.append("topic_id", props.topic._id);
-            formdata.append("panel_member_id", '629b4b5d452ed041b4254382');
-            await topicAPI.submitTopicToPanel(formdata)
-            setSuccessShowToast(true)
+            formdata.append("panel_member_id", "629b4b5d452ed041b4254382");
+            await topicAPI.submitTopicToPanel(formdata);
+            setSuccessShowToast(true);
             setOpen(false);
             window.location.reload(false);
-
         } catch (e) {
-            setErrorShowToast(true)
+            setErrorShowToast(true);
         }
-        setBtnLoading(false)
-    }
 
-    const handleClickOpen = () => {
-        setOpen(true)
-    }
+        const handleClickOpen = () => {
+            setOpen(true)
+        }
 
-    return (
-        <div>
-            {
-                showSuccessToast && (<>
-                        <Success message="Your topic submit to supervisor successfully"/>
-                    </>
-                )
-            }
+        return (
+            <div>
+                {
+                    showSuccessToast && (<>
+                            <Success message="Your topic submit to supervisor successfully"/>
+                        </>
+                    )
+                }
 
-            {
-                showErrorToast && (<>
+                {showErrorToast && (
+                    <>
                         <ErrorToast message="There have some error. Please try again later"/>
                     </>
-                )
-            }
-            <Button variant="outlined" sx={{
-                float: 'right',
-            }} onClick={handleClickOpen}>
-                Submit My Topic to Panel
-            </Button>
-            <BootstrapDialog
-                onClose={handleClose}
-                aria-labelledby="customized-dialog-title"
-                disableEscapeKeyDown={true}
-                open={openned}
-
-            >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-                    SUBMIT OUR TOPIC TO PANEL
-                </BootstrapDialogTitle>
-                <DialogContent dividers>
-                    <Typography gutterBottom>
-                        <form>
-                            <div className="form-group mt-2">
-                                <label className="mt-4" style={{fontWeight: 'bold', color: '#5A5A5A'}}>Panel
-                                    member</label>
-                                <input className="form-control" id="" disabled={true}
-                                       placeholder="Enter Your Topic Name" required value={props.panel}/>
-                            </div>
-                            <div className="form-group mt-2">
-                                <label className="mt-4" style={{fontWeight: 'bold', color: '#5A5A5A'}}>Topic
-                                    Name</label>
-                                <textarea className="form-control" id="" disabled={true}
-                                          placeholder="Enter Your Topic Name" required style={{height: '100px'}}
-                                          value={props.topic.name}/>
-                            </div>
-                            <div className="form-group mt-2">
-                                <div hidden={filepath.length > 0} {...getRootProps({style})}>
-                                    <input {...getInputProps()} />
-                                    <p>Drag 'n' drop your image file here, or click to select files</p>
-                                </div>
-
-                                <h4>File Details</h4>
-                                <ul>{filepath}</ul>
-                            </div>
-                            <br/>
-                        </form>
-                    </Typography>
-                    <Typography gutterBottom>
-                        Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-                        magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-                        ullamcorper nulla non metus auctor fringilla.
-                    </Typography>
-                </DialogContent>
-                <DialogActions>
-                    <LoadingButton
-                        onClick={submitTopicToPanel}
-                        endIcon={<SendIcon/>}
-                        loading={btnLoading}
-                        loadingPosition="end"
-                        variant="contained"
+                )}
+                <Button
+                    variant="outlined"
+                    sx={{
+                        float: "right",
+                    }}
+                    onClick={handleClickOpen}
+                >
+                    Submit My Topic to Panel
+                </Button>
+                <BootstrapDialog
+                    onClose={handleClose}
+                    aria-labelledby="customized-dialog-title"
+                    disableEscapeKeyDown={true}
+                    open={openned}
+                >
+                    <BootstrapDialogTitle
+                        id="customized-dialog-title"
+                        onClose={handleClose}
                     >
-                        Send
-                    </LoadingButton>
-                </DialogActions>
+                        SUBMIT OUR TOPIC TO PANEL
+                    </BootstrapDialogTitle>
+                    <DialogContent dividers>
+                        <Typography gutterBottom>
+                            <form>
+                                <div className="form-group mt-2">
+                                    <label
+                                        className="mt-4"
+                                        style={{fontWeight: "bold", color: "#5A5A5A"}}
+                                    >
+                                        Panel member
+                                    </label>
+                                    <input
+                                        className="form-control"
+                                        id=""
+                                        disabled={true}
+                                        placeholder="Enter Your Topic Name"
+                                        required
+                                        value={props.panel}
+                                    />
+                                </div>
+                                <div className="form-group mt-2">
+                                    <label
+                                        className="mt-4"
+                                        style={{fontWeight: "bold", color: "#5A5A5A"}}
+                                    >
+                                        Topic Name
+                                    </label>
+                                    <textarea
+                                        className="form-control"
+                                        id=""
+                                        disabled={true}
+                                        placeholder="Enter Your Topic Name"
+                                        required
+                                        style={{height: "100px"}}
+                                        value={props.topic.name}
+                                    />
+                                </div>
+                                <div className="form-group mt-2">
+                                    <div hidden={filepath.length > 0} {...getRootProps({style})}>
+                                        <input {...getInputProps()} />
+                                        <p>
+                                            Drag 'n' drop your image file here, or click to select files
+                                        </p>
+                                    </div>
 
-            </BootstrapDialog>
+                                    <h4>File Details</h4>
+                                    <ul>{filepath}</ul>
+                                </div>
+                                <br/>
+                            </form>
+                        </Typography>
+                        <Typography gutterBottom>
+                            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
+                            magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
+                            ullamcorper nulla non metus auctor fringilla.
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <LoadingButton
+                            onClick={submitTopicToPanel}
+                            endIcon={<SendIcon/>}
+                            loading={btnLoading}
+                            loadingPosition="end"
+                            variant="contained"
+                        >
+                            Send
+                        </LoadingButton>
+                    </DialogActions>
 
-        </div>
-    );
+                </BootstrapDialog>
+
+            </div>
+        );
+    }
 }
