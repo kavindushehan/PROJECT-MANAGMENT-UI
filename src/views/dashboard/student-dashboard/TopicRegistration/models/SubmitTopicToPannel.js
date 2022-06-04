@@ -147,9 +147,8 @@ export default function SubmitTopicToPanel(props) {
             let formdata = new FormData();
             formdata.append("doc", acceptedFiles[0]);
             formdata.append("topic_id", props.topic._id);
-            formdata.append("panel_member_id", panel._id);
+            formdata.append("panel_member_id", '629b4b5d452ed041b4254382');
             await topicAPI.submitTopicToPanel(formdata)
-            await chatAPI.createChat(formdata)
             setSuccessShowToast(true)
             setOpen(false);
             window.location.reload(false);
@@ -201,7 +200,7 @@ export default function SubmitTopicToPanel(props) {
                                 <label className="mt-4" style={{fontWeight: 'bold', color: '#5A5A5A'}}>Panel
                                     member</label>
                                 <input className="form-control" id="" disabled={true}
-                                       placeholder="Enter Your Topic Name" required value={panel.name}/>
+                                       placeholder="Enter Your Topic Name" required value={props.panel}/>
                             </div>
                             <div className="form-group mt-2">
                                 <label className="mt-4" style={{fontWeight: 'bold', color: '#5A5A5A'}}>Topic

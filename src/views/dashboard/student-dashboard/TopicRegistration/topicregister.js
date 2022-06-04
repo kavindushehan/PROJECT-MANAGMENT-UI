@@ -42,6 +42,7 @@ export default function TopicRegister() {
                     setReject(rejectResult[index])
                 }
 
+                console.log(loggedInGroup)
                 console.log(result[0])
                 setTopic(result[0])
             } catch (e) {
