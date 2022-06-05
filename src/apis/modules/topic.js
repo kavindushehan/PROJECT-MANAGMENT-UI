@@ -9,6 +9,7 @@ export default {
     getOurTopic: () => api.get(`${resource}/my-topic`),
     assignMembers: (payload) => api.patch(`${resource}`, payload),
     getProduct: (id) => api.get(`${resource}/${id}`),
+    getMyPanel: () => api.get(`api/supervisors/get-my-panel`),
 
     deleteProduct: (id) => api.delete(`${resource}/${id}`)
 }

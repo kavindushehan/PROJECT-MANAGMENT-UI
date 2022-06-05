@@ -1,6 +1,6 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
+import {styled} from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -10,19 +10,19 @@ import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import { Select } from "@mui/material";
+import {Select} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import categoryAPI from "../../../../../apis/modules/topicCategory";
 import topicAPI from "../../../../../apis/modules/topic";
-import { Spinner } from "react-bootstrap";
+import {Spinner} from "react-bootstrap";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import ErrorToast from "../../../../../toast/error";
 import Success from "../../../../../toast/success";
 import Loader from "../../../../../loader/loader";
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+const BootstrapDialog = styled(Dialog)(({theme}) => ({
     "& .MuiDialogContent-root": {
         padding: theme.spacing(2),
     },
@@ -38,10 +38,10 @@ export interface DialogTitleProps {
 }
 
 const BootstrapDialogTitle = (props: DialogTitleProps) => {
-    const { children, onClose, ...other } = props;
+    const {children, onClose, ...other} = props;
 
     return (
-        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+        <DialogTitle sx={{m: 0, p: 2}} {...other}>
             {children}
             {onClose ? (
                 <IconButton
@@ -54,7 +54,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
                         color: (theme) => theme.palette.grey[500],
                     }}
                 >
-                    <CloseIcon />
+                    <CloseIcon/>
                 </IconButton>
             ) : null}
         </DialogTitle>
@@ -70,25 +70,18 @@ export default function SubmitTopicToPannel(props) {
     const [showSuccessToast, setSuccessShowToast] = useState(false);
     const [showErrorToast, setErrorShowToast] = useState(false);
 
-    const [coSuperVisor, setCoSupervisor] = useState([]);
+    const [panel, setPanel] = useState([]);
 
     const handleClickOpen = async () => {
         setOpen(true);
-        let payload = {
-            category_id: props.topic.category_id,
-        };
-        let supervisorsRespond = (await topicAPI.getStaff(payload, "Co-supervisor"))
-            .data.data.filteredData;
-        setCoSupervisor(supervisorsRespond);
+        let panelRespond = (await topicAPI.getMyPanel()).data.data.Respond;
+        console.log(panelRespond)
+        setPanel(panelRespond);
     };
     const handleClose = () => {
         setOpen(false);
     };
 
-    const selectSupervisor = (event: selectedCoSupervisor) => {
-        setSelectedCoSupervisor(event.target.value);
-        console.log(selectedCoSupervisor);
-    };
 
     const submitTopicToCoSupervisor = async () => {
         try {
@@ -109,20 +102,25 @@ export default function SubmitTopicToPannel(props) {
 
     return (
         <div>
-            {loading && <Loader />}
+            {loading && <Loader/>}
             {!loading && (
                 <div>
                     {showSuccessToast && (
                         <>
-                            <Success message="Your topic submit to supervisor is successfully" />
+                            <Success message="Your topic submit to supervisor is successfully"/>
                         </>
                     )}
 
                     {showErrorToast && (
                         <>
-                            <ErrorToast message="There have some errors. Please try again later" />
+                            <ErrorToast message="There have some errors. Please try again later"/>
                         </>
                     )}
+                    {
+                        panel == null && (
+                            <ErrorToast message="Your group haven't any panel yet"/>
+                        )
+                    }
                     <Button
                         variant="outlined"
                         sx={{
@@ -130,7 +128,7 @@ export default function SubmitTopicToPannel(props) {
                         }}
                         onClick={handleClickOpen}
                     >
-                       SUBMIT TOPIC TO PANEL
+                        SUBMIT TOPIC TO PANEL
                     </Button>
                     <BootstrapDialog
                         onClose={handleClose}
@@ -147,39 +145,25 @@ export default function SubmitTopicToPannel(props) {
                         <DialogContent dividers>
                             <Typography gutterBottom>
                                 <form>
-                                    <div className="row mt-2">
-
-                                        <div className="col-md-12">
-                                            <FormControl fullWidth>
-                                                <InputLabel
-                                                    sx={{ marginTop: -1 }}
-                                                    id="demo-simple-select-label"
-                                                >
-                                                    Select your professor
-                                                </InputLabel>
-                                                <Select
-                                                    size="small"
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={selectedCoSupervisor}
-                                                    label="Age"
-                                                    onChange={selectSupervisor}
-                                                >
-                                                    {coSuperVisor.map((element) => {
-                                                        return (
-                                                            <MenuItem value={element._id}>
-                                                                {element.name}
-                                                            </MenuItem>
-                                                        );
-                                                    })}
-                                                </Select>
-                                            </FormControl>
-                                        </div>
-                                    </div>
                                     <div className="form-group mt-2">
                                         <label
                                             className="mt-4"
-                                            style={{ fontWeight: "bold", color: "#5A5A5A" }}
+                                            style={{fontWeight: "bold", color: "#5A5A5A"}}
+                                        >
+                                            Panel Name
+                                        </label>
+                                        <input type="text"
+                                               className="form-control"
+                                               id=""
+                                               disabled={true}
+                                               value={panel.name}
+                                        />
+                                    </div>
+
+                                    <div className="form-group mt-2">
+                                        <label
+                                            className="mt-4"
+                                            style={{fontWeight: "bold", color: "#5A5A5A"}}
                                         >
                                             Topic Name
                                         </label>
@@ -189,11 +173,11 @@ export default function SubmitTopicToPannel(props) {
                                             disabled={true}
                                             placeholder="Enter Your Topic Name"
                                             required
-                                            style={{ height: "100px" }}
+                                            style={{height: "100px"}}
                                             value={props.topic.name}
                                         />
                                     </div>
-                                    <br />
+                                    <br/>
                                 </form>
                             </Typography>
                             <Typography gutterBottom>
@@ -206,7 +190,7 @@ export default function SubmitTopicToPannel(props) {
                             <LoadingButton
                                 disabled={!selectedCoSupervisor}
                                 onClick={submitTopicToCoSupervisor}
-                                endIcon={<SendIcon />}
+                                endIcon={<SendIcon/>}
                                 loading={btnLoading}
                                 loadingPosition="end"
                                 variant="contained"
