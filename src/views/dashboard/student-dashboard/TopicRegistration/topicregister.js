@@ -23,10 +23,10 @@ export default function TopicRegister() {
     const [rejectTopic, setReject] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // const getMyTopic = async () => {
-    //     const ourTopicRespond = (await topicAPI.getOurTopic()).data.data.filteredData
-    //     setTopic(ourTopicRespond)
-    // }
+    const getMyTopic = async () => {
+        const ourTopicRespond = (await topicAPI.getOurTopic()).data.data.filteredData
+        setTopic(ourTopicRespond)
+    }
 
     useEffect(() => {
         setLoading(true)
@@ -46,7 +46,7 @@ export default function TopicRegister() {
                 console.log(result[0])
                 setTopic(result[0])
             } catch (e) {
-
+                alert('error')
             }
             setLoading(false)
 
