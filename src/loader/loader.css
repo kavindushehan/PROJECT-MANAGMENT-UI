@@ -1,8 +1,13 @@
 body { background: #222; }
 figure {
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
     position: absolute;
-    margin: auto;
-    top: 0; bottom: 0; left: 0; right: 0;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    left: 50%;
     width: 6.250em; height: 6.250em;
     animation: rotate 2.4s linear infinite;
 }
