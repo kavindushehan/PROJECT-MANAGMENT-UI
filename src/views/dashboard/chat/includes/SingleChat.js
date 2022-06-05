@@ -16,7 +16,7 @@ import io from "socket.io-client";
 // import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import AuthContext from "../../../../context/AuthContext";
 import './chat.css'
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://project-managment-ui.vercel.app";
 let socket, selectedChatCompare;
 
 
