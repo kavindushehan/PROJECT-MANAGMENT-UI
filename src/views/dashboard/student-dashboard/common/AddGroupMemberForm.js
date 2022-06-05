@@ -8,9 +8,11 @@ import Alert from "@mui/material/Alert";
 import UndoIcon from '@mui/icons-material/Undo';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AuthContext from "../../../../context/AuthContext";
+import Loader from "../../../../loader/loader";
 
 const AddGroupMemberForm = (props) => {
 
+    const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [errors, setErrors] = useState([]);
     let [showColumns, setShowColumns] = useState(1);
@@ -31,6 +33,7 @@ const AddGroupMemberForm = (props) => {
     const assignGroup = async () => {
         try {
             setBtnLoading(true)
+            setLoading(true)
             const arr = []
             data.map(i => arr.push(i.email))
             const payload = {
@@ -52,6 +55,7 @@ const AddGroupMemberForm = (props) => {
             }
         }
         setBtnLoading(false)
+        setLoading(false)
     }
 
     const increment = () => {
@@ -74,92 +78,101 @@ const AddGroupMemberForm = (props) => {
         setData(values)
     }
     return (
-        <div className="col">
-            <div style={{
-                paddingTop: '3%', paddingLeft: '5%', paddingRight: '5%', marginTop: '15px',
-                marginBottom: '15px'
-            }}
-                 className="card">
-                <InfoAlert message='You can group member here or later. maximum number is 4'/>
+        <div>
+
+            {
+                loading && (
+                    <Loader/>
+                )
+            }
+            <div className="col">
+                <div style={{
+                    paddingTop: '3%', paddingLeft: '5%', paddingRight: '5%', marginTop: '15px',
+                    marginBottom: '15px'
+                }}
+                     className="card">
+                    <InfoAlert message='You can group member here or later. maximum number is 4'/>
 
 
-                <h4 style={{textAlign: 'center', fontWeight: 'bold'}}>Members Register</h4>
-                <br/>
-                <form>
-                    {data.map((inputField, index) => (
-                        <div className="form-group" key={index}>
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <label style={{fontWeight: 'bold', color: '#5A5A5A'}}>Group
-                                        Member {index === 0 ? '' : index} Email</label>
-                                    <input type="email" className="form-control" id=""
-                                           name="email"
-                                           placeholder="Enter Member Email"
-                                           onChange={(event) => handleInput(index, event)}
-                                           required/>
+                    <h4 style={{textAlign: 'center', fontWeight: 'bold'}}>Members Register</h4>
+                    <br/>
+                    <form>
+                        {data.map((inputField, index) => (
+                            <div className="form-group" key={index}>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <label style={{fontWeight: 'bold', color: '#5A5A5A'}}>Group
+                                            Member {index === 0 ? '' : index} Email</label>
+                                        <input type="email" className="form-control" id=""
+                                               name="email"
+                                               placeholder="Enter Member Email"
+                                               onChange={(event) => handleInput(index, event)}
+                                               required/>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <Tooltip hidden={showColumns === 1} title="UNDO MEMBERS" placement="top-start">
+                                            <CancelIcon onClick={() => decrement(index)} sx={{
+                                                marginTop: '36px'
+                                            }}>
+                                                <UndoIcon/>
+                                            </CancelIcon>
+                                        </Tooltip>
+                                    </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <Tooltip hidden={showColumns === 1} title="UNDO MEMBERS" placement="top-start">
-                                        <CancelIcon onClick={() => decrement(index)} sx={{
-                                            marginTop: '36px'
-                                        }}>
-                                            <UndoIcon/>
-                                        </CancelIcon>
-                                    </Tooltip>
-                                </div>
+
+
                             </div>
 
+                        ))}
+
+                        <Tooltip hidden={props.rowNumber === showColumns} title="ADD MORE MEMBERS"
+                                 placement="top-start">
+                            <Button onClick={() => increment()}>
+                                ADD MORE
+                            </Button>
+                        </Tooltip>
+
+                        <div hidden={showColumns < props.rowNumber}>
+                            <WarningAlert message='You can add maximum group member is 4'/>
+                        </div>
+                        <hr/>
+                        <div>
+                            <Button variant="contained" disabled={btnLoading} sx={{
+                                float: 'right',
+                                marginBottom: '10px',
+                                marginLeft: '5px',
+                                marginTop: '5px'
+                            }} onClick={assignGroup}>
+                                {btnLoading ? 'Registering...' : 'ADD MEMBERS'}
+                            </Button>
+                            <Button variant="contained" className="btn btn-secondary"
+                                    data-bs-dismiss="modal" sx={{
+                                float: 'right',
+                                marginBottom: '10px',
+                                marginTop: '5px'
+
+                            }} onClick={(e) => {
+                                window.location = '/student/home'
+                            }}>
+                                Skip
+                            </Button>
 
                         </div>
+                    </form>
+                    <br/>
+                </div>
 
-                    ))}
-
-                    <Tooltip hidden={props.rowNumber === showColumns} title="ADD MORE MEMBERS" placement="top-start">
-                        <Button onClick={() => increment()}>
-                            ADD MORE
-                        </Button>
-                    </Tooltip>
-
-                    <div hidden={showColumns < props.rowNumber}>
-                        <WarningAlert message='You can add maximum group member is 4'/>
-                    </div>
-                    <hr/>
-                    <div>
-                        <Button variant="contained" disabled={btnLoading} sx={{
-                            float: 'right',
-                            marginBottom: '10px',
-                            marginLeft: '5px',
-                            marginTop: '5px'
-                        }} onClick={assignGroup}>
-                            {btnLoading ? 'Registering...' : 'ADD MEMBERS'}
-                        </Button>
-                        <Button variant="contained" className="btn btn-secondary"
-                                data-bs-dismiss="modal" sx={{
-                            float: 'right',
-                            marginBottom: '10px',
-                            marginTop: '5px'
-
-                        }} onClick={(e) => {
-                            window.location = '/student/home'
-                        }}>
-                            Skip
-                        </Button>
-
-                    </div>
-                </form>
-                <br/>
+                {/*This will show errors*/}
+                <Snackbar open={open} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
+                        {errors.map((element) => {
+                            return <div>
+                                {element}
+                            </div>
+                        })}
+                    </Alert>
+                </Snackbar>
             </div>
-
-            {/*This will show errors*/}
-            <Snackbar open={open} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
-                    {errors.map((element) => {
-                        return <div>
-                            {element}
-                        </div>
-                    })}
-                </Alert>
-            </Snackbar>
         </div>
     );
 };
