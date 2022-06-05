@@ -21,7 +21,6 @@ function AuthContextProvider(props) {
            setloggedIn(loggedInRes.data.data[0]);
            setUser(loggedInRes.data.data[0])
 
-           console.log('ava')
            console.log(loggedInRes.data.data[0])
        }catch (error){
            setloggedIn(null)
