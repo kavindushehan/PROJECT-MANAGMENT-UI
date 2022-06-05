@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 
 export default function Profile() {
+    const {loggedIn, loggedInGroup} = useContext(AuthContext);
     
 
     return (
@@ -23,16 +24,26 @@ export default function Profile() {
                 <Avatar alt="Remy Sharp" src="https://i.postimg.cc/fWFqYmvx/ezgif-com-gif-maker.gif" sx={{ width: 150, height: 150 }}/>
                 </center>
                 <div class="rela-block profile-name-container">
-                    <div style={{fontWeight: 'bold', letterSpacing: '0', paddingTop: '10px'}} class="rela-block user-name" id="user_name">Kavindu Lakshan</div>
-                    <div class="rela-block user-desc">REG-2022/14</div>
+                    <div style={{fontWeight: 'bold', letterSpacing: '0', paddingTop: '10px'}} class="rela-block user-name" id="user_name">{loggedIn.name}</div>
+                    {
+                        loggedInGroup && (
+                            <div className="rela-block user-desc">{loggedInGroup.name}</div>
+                        )
+                    }
+                    {
+                        !loggedInGroup && (
+                            <div className="rela-block user-desc">SG-0078</div>
+                        )
+                    }
+
                 </div>
                 <center>
                 <button class="btn btn-success" style={{marginRight: '0.5%'}}>Return Back</button>
                 <button class="btn btn-primary" style={{marginLeft: '0.5%'}}>Edit Profile</button>
                 </center>
                 <div class="rela-block profile-card-stats" style={{marginTop: '5%'}}>
-                <div class="floated profile-stat" style={{fontWeight: '600'}}>Email<br/><span style={{fontWeight: 'normal'}}>kavindulakshan@gmail.com</span></div>
-                <div class="floated profile-stat" style={{fontWeight: '600'}}>Role<br/><span style={{fontWeight: 'normal'}}>Student</span></div>
+                <div class="floated profile-stat" style={{fontWeight: '600'}}>Email<br/><span style={{fontWeight: 'normal'}}>{loggedIn.email}</span></div>
+                <div class="floated profile-stat" style={{fontWeight: '600'}}>Role<br/><span style={{fontWeight: 'normal'}}>{loggedIn.role}</span></div>
                 <div class="floated profile-stat" style={{fontWeight: '600'}}>Status<br/><span style={{fontWeight: 'normal'}}>Active</span></div>
                 </div>
             </div>

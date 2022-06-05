@@ -66,8 +66,7 @@ const ScrollableChat = ({ messages }) => {
               )}
               {isSameSenderMargin(messages, m, i, user._id) && (
                 <div>
-                  <div class="incoming_msg_img"></div>
-                  <div class="outgoing_msg">
+                  <div class="outgoing_msg" style={{marginTop:'2px'}}>
                     <div class="sent_msg">
                       <p>{m.content}</p>
                     </div>
