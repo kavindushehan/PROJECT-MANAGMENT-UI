@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://localhost:5000'
+    baseURL: 'https://reg14-new.herokuapp.co'
 })
 
 if (localStorage.getItem('JWT')) {
