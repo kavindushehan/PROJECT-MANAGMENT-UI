@@ -12,7 +12,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {Select} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import categoryAPI from "../../../../../apis/modules/topicCategory";
 import topicAPI from "../../../../../apis/modules/topic";
 import {Spinner} from "react-bootstrap";
@@ -21,6 +21,7 @@ import SendIcon from "@mui/icons-material/Send";
 import ErrorToast from "../../../../../toast/error";
 import Success from "../../../../../toast/success";
 import Loader from "../../../../../loader/loader";
+import {useDropzone} from "react-dropzone";
 
 const BootstrapDialog = styled(Dialog)(({theme}) => ({
     "& .MuiDialogContent-root": {
@@ -63,9 +64,10 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 
 export default function SubmitTopicToPannel(props) {
     const [loading, setLoading] = useState(false);
-    const [open, setOpen] = React.useState(false);
+    const [openned, setOpen] = React.useState(false);
     const [selectedCoSupervisor, setSelectedCoSupervisor] = useState("");
     const [btnLoading, setBtnLoading] = useState(false);
+    const [files, setFiles] = useState([]);
 
     const [showSuccessToast, setSuccessShowToast] = useState(false);
     const [showErrorToast, setErrorShowToast] = useState(false);
@@ -82,15 +84,74 @@ export default function SubmitTopicToPannel(props) {
         setOpen(false);
     };
 
+    const baseStyle = {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "90px",
+        borderWidth: 2,
+        borderRadius: 2,
+        borderColor: "#A9A9B0",
+        borderStyle: "dashed",
+        marginBottom: "20px",
+        backgroundColor: "#ffffff",
+        color: "default",
+        outline: "none",
+        transition: "border .24s ease-in-out",
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const activeStyle = {
+        borderColor: "#2196f3",
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const acceptStyle = {
+        borderColor: "#00e676",
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const rejectStyle = {
+        borderColor: "#ff1744",
+    };
+
+    //This is used to drag and drop image
+    const {acceptedFiles, getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, open} = useDropzone({
+        onDrop: (acceptedFiles) => {
+            setFiles(
+                acceptedFiles.map((file) =>
+                    Object.assign(file, {
+                        preview: URL.createObjectURL(file),
+                    })
+                )
+            );
+        },
+    });
+
+
+    //This is used style drag and drop image
+    const style = useMemo(
+        () => ({
+            ...baseStyle,
+            ...(isDragActive ? activeStyle : {}),
+            ...(isDragAccept ? acceptStyle : {}),
+            ...(isDragReject ? rejectStyle : {}),
+        }),
+        [baseStyle, isDragActive, activeStyle, isDragAccept, acceptStyle, isDragReject, rejectStyle]
+    );
+    const filepath = acceptedFiles.map((file) => (
+        <li key={file.name}>
+            {file.name} - {file.size} bytes
+        </li>
+    ));
 
     const submitTopicToCoSupervisor = async () => {
         try {
             setBtnLoading(true);
-            let payload = {
-                topic_id: props.topic._id,
-                co_supervisorID: selectedCoSupervisor,
-            };
-            await topicAPI.submitTopicToCoSupervisor(payload);
+            let formdata = new FormData();
+            formdata.append("doc", acceptedFiles[0])
+            formdata.append("topic_id", props.topic._id);
+            formdata.append("panel_member_id", panel._id);
+
+            await topicAPI.submitTopicToPanel(formdata);
             setSuccessShowToast(true);
             setOpen(false);
             window.location.reload(false);
@@ -134,7 +195,7 @@ export default function SubmitTopicToPannel(props) {
                         onClose={handleClose}
                         aria-labelledby="customized-dialog-title"
                         disableEscapeKeyDown={true}
-                        open={open}
+                        open={openned}
                     >
                         <BootstrapDialogTitle
                             id="customized-dialog-title"
@@ -177,6 +238,16 @@ export default function SubmitTopicToPannel(props) {
                                             value={props.topic.name}
                                         />
                                     </div>
+
+                                    <div className="form-group mt-2">
+                                        <div hidden={filepath.length > 0} {...getRootProps({style})}>
+                                            <input {...getInputProps()} />
+                                            <p>Drag 'n' drop your image file here, or click to select files</p>
+                                        </div>
+
+                                        <h4>File Details</h4>
+                                        <ul>{filepath}</ul>
+                                    </div>
                                     <br/>
                                 </form>
                             </Typography>
@@ -188,7 +259,7 @@ export default function SubmitTopicToPannel(props) {
                         </DialogContent>
                         <DialogActions>
                             <LoadingButton
-                                disabled={!selectedCoSupervisor}
+                                disabled={filepath.length === 0 || btnLoading}
                                 onClick={submitTopicToCoSupervisor}
                                 endIcon={<SendIcon/>}
                                 loading={btnLoading}

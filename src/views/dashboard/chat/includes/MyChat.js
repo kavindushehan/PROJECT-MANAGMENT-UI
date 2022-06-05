@@ -80,37 +80,53 @@ const MyChats = ({fetchAgain, setFetchAgain}) => {
                                             {chats ? (
                                                 <div>
                                                     {chats.map((chat) => (
-                                                        <div
-                                                            class="chat_list active_chat"
-                                                            onClick={() => setSelectedChat(chat)}
-                                                            key={chat._id}
-                                                        >
-                                                            <div class="chat_people">
-                                                                <div class="chat_img">
-                                                                    {" "}
-                                                                    <img
-                                                                        src="https://ptetutorials.com/images/user-profile.png"
-                                                                        alt="sunil"
-                                                                    />{" "}
-                                                                </div>
-                                                                <div class="chat_ib">
-                                                                    <h5>
-                                                                        {!chat.isGroupChat
-                                                                            ? getSender(loggedUser, chat.users)
-                                                                            : chat.chatName}{" "}
-                                                                        <span class="chat_date">Dec 25</span>
-                                                                    </h5>
-                                                                    <p>
-                                                                        {chat.latestMessage.content.length > 50
-                                                                            ? chat.latestMessage.content.substring(
-                                                                            0,
-                                                                            100
-                                                                        ) + "..."
-                                                                            : chat.latestMessage.content}
-                                                                    </p>
+                                                        <div>
+                                                            <div
+                                                                className="chat_list active_chat"
+                                                                onClick={() => setSelectedChat(chat)}
+                                                                key={chat._id}
+                                                            >
+                                                                <div className="chat_people">
+                                                                    <div className="chat_img">
+                                                                        {" "}
+                                                                        <img
+                                                                            src="https://ptetutorials.com/images/user-profile.png"
+                                                                            alt="sunil"
+                                                                        />{" "}
+                                                                    </div>
+                                                                    <div className="chat_ib">
+                                                                        <h5>
+                                                                            {!chat.isGroupChat
+                                                                                ? getSender(loggedUser, chat.users)
+                                                                                : chat.chatName}{" "}
+                                                                            <span className="chat_date">Dec 25</span>
+                                                                        </h5>
+                                                                        {
+                                                                            chat.latestMessage && (
+                                                                                <p>
+                                                                                    {chat.latestMessage.content.length > 50
+                                                                                        ? chat.latestMessage.content.substring(
+                                                                                        0,
+                                                                                        100
+                                                                                    ) + "..."
+                                                                                        : chat.latestMessage.content}
+                                                                                </p>
+                                                                            )
+                                                                        }
+                                                                        {
+                                                                            !chat.latestMessage && (
+                                                                                <div>
+                                                                                    No messages
+                                                                                </div>
+                                                                            )
+                                                                        }
+
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
                                                     ))}
                                                 </div>
                                             ) : (
