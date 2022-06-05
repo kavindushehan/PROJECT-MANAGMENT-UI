@@ -59,7 +59,6 @@ const ScrollableChat = ({ messages }) => {
                   <div class="received_msg">
                     <div class="received_withd_msg">
                       <p>{m.content}</p>
-                      <span class="time_date">{user.name}</span>
                     </div>
                   </div>
                 </div>
