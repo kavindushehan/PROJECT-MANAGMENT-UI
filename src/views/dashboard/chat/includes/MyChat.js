@@ -72,8 +72,6 @@ const MyChats = ({fetchAgain, setFetchAgain}) => {
                     <div class="container">
                         <div class="messaging">
                             <div class="inbox_msg">
-
-
                                 <div class="inbox_people">
                                     <div class="headind_srch">
                                         <div class="inbox_chat">
@@ -125,8 +123,6 @@ const MyChats = ({fetchAgain, setFetchAgain}) => {
                                                                 </div>
                                                             </div>
                                                         </div>
-
-
                                                     ))}
                                                 </div>
                                             ) : (
