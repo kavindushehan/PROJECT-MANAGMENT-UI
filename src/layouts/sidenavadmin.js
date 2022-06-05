@@ -36,7 +36,7 @@ export default function Sidenavadmin() {
                 <li class="rela-inline">
                   <Link to="/profile">
                     <IconButton>
-                      <Avatar alt="Remy Sharp" src="" />
+                      <Avatar alt="Remy Sharp" src="https://i.postimg.cc/fWFqYmvx/ezgif-com-gif-maker.gif" />
                     </IconButton>
                   </Link>
                 </li>
@@ -67,12 +67,12 @@ export default function Sidenavadmin() {
             <span>Allocate Panel</span>
           </div>
         </Link>
-        <Link to="/admin/submissions">
+        {/* <Link to="/admin/submissions">
           <div className="menusb">
             <i class="fas fa-calendar-check"></i>
             <span>Submissions</span>
           </div>
-        </Link>
+        </Link> */}
         <Link to="/admin/doc">
           <div className="menusb">
             <i class="fas fa-cloud-upload-alt"></i>
