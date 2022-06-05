@@ -89,8 +89,8 @@ export default function Sidenav(props) {
           </Link>
           <Link to="/student/document">
             <div className="menusb">
-              <ArrowDownwardIcon/>
-              <span class="ml-1">Download</span>
+              <i className="fa fa-download" aria-hidden="true"></i>
+              <span >Download</span>
             </div>
           </Link>
           {/*<Link to="/student/uploads">*/}
